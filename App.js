@@ -1,12 +1,38 @@
-import React from 'react';
+
 import { AppLoading } from 'expo';
 import { Container, Text, View, Content } from 'native-base';
 import * as Font from 'expo-font';
 import { Ionicons } from '@expo/vector-icons';
-import AnatomyExample from './nativebase';
-import { ImageBackground, StyleSheet } from 'react-native'
-import LoginForm from './LoginForm';
-import { LinearGradient } from 'expo-linear-gradient';
+
+import {Button, ImageBackground, StyleSheet } from 'react-native'
+
+import 'react-native-gesture-handler';
+import * as React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import Login from './Login'
+import Home from './Home';
+import Chart from './chart';
+
+const Stack = createStackNavigator();
+
+function DetailsScreen({ navigation }) {
+  return (
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Text>Details Screen</Text>
+      <Button
+        title="Go to Details... again"
+        onPress={() => navigation.push('Details')}
+      />
+      <Button title="Go to Home" onPress={() => navigation.navigate('Home')} />
+      <Button title="Go back" onPress={() => navigation.goBack()} />
+      <Button
+        title="Go back to first screen in stack"
+        onPress={() => navigation.popToTop()}
+      />
+    </View>
+  );
+}
 
 export default class App extends React.Component {
   constructor(props) {
@@ -31,22 +57,19 @@ export default class App extends React.Component {
     }
 
     return (
-      <Container>
+      <NavigationContainer>
+        <Stack.Navigator  initialRouteName="chart" screenOptions={{
+    headerShown: false
+  }}>
+          <Stack.Screen name="Login" component={Login} />
+          <Stack.Screen name="Details" component={DetailsScreen} />
+          <Stack.Screen name="Home" component={Home} />
+          <Stack.Screen name="chart" component={Chart} />
 
-        <ImageBackground
-          source={require('./img/4.jpg')}
-          style={{ flex: 1 }}
 
-        >
-          <LinearGradient
-            colors={['rgba(255,255,255,0)', '#000000']}
-            style={styles.linearGradient}
-          />
-          <Content style={styles.MainContainer}>
-            <LoginForm />
-          </Content>
-        </ImageBackground>
-      </Container>
+        </Stack.Navigator>
+       
+      </NavigationContainer>
     );
   }
 }
